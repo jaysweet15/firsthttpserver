@@ -4,9 +4,22 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 const server = http.createServer((req, res) => {
-  res.statusCode = 200;
+  
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, World!\n');
+
+  if (req.url === '/') {
+    res.statusCode = 200;
+    res.end('Welcome to my server!\n');
+
+  } else if (req.url === '/health') {
+    res.statusCode = 200;
+    res.end('Server is healthy!\n');
+
+  } else {
+    res.statusCode = 404;
+    res.end('Page not found\n');
+  }
+
 });
 
 server.listen(port, hostname, () => {
