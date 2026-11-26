@@ -27,6 +27,22 @@ const server = http.createServer((req, res) => {
         res.setHeader('Content-Type', 'application/json');
 
         res.end(JSON.stringify(users));
+
+    } else if (req.method === 'GET' && req.url.startsWith('/users/')) {
+        
+        const userId = Number(req.url.split('/')[2]);
+        
+        const user = users.find(user => user.id === userId);
+        
+        if (user) {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(user));
+        } else {
+            res.statusCode = 404;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end('User not found');
+        }
         
     } else if (req.method === 'GET' && req.url === '/products') {
         res.statusCode = 200;
