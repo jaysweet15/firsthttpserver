@@ -53,6 +53,37 @@ const server = http.createServer((req, res) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'text/plain');
         res.end('Server is healthy!');
+
+    } else if (req.method === 'POST' && req.url === '/users') {
+
+    let body = '';
+
+    req.on('data', chunk => {
+        body += chunk;
+    });
+
+    req.on('end', () => {
+        try {
+            const userData = JSON.parse(body);
+
+            const newUser = {
+                id: users.length + 1,
+                name: userData.name,
+                role: userData.role
+            };
+
+            users.push(newUser);
+
+            res.statusCode = 201;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify(newUser));
+
+        } catch (error) {
+            res.statusCode = 400;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end('Invalid JSON');
+        }
+    });
         
     } else {
         res.statusCode = 404;
