@@ -66,6 +66,13 @@ const server = http.createServer((req, res) => {
         try {
             const userData = JSON.parse(body);
 
+    if (typeof userData.name !== 'string' || userData.name.trim() === '') {
+                res.statusCode = 400;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end('Name is required and must be a non-empty string');
+                return;
+            }
+
             const newUser = {
                 id: users.length + 1,
                 name: userData.name,
